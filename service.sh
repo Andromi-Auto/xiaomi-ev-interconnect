@@ -28,3 +28,20 @@ for user in $(pm list users | grep -o 'UserInfo{[0-9]*' | cut -d '{' -f 2); do
     pm grant --user "$user" com.xiaomi.mis android.permission.ACCESS_COARSE_LOCATION 2>/dev/null
     pm grant --user "$user" com.xiaomi.mis android.permission.POST_NOTIFICATIONS 2>/dev/null
 done
+
+# Wi-Fi country CN: Interconnectivity's Wi-Fi P2P only works on the Chinese regulatory domain,
+# whatever the ROM. Android's override beats the SIM's country and is kept in memory only, so it
+# is set on every boot. The Wi-Fi service can answer a little after boot, hence the retries.
+wifi_cn() { cmd wifi get-country-code 2>/dev/null | grep -q '= CN'; }
+i=0
+until wifi_cn || [ $i -ge 30 ]; do
+    cmd wifi force-country-code enabled CN >/dev/null 2>&1
+    i=$((i + 1))
+    sleep 2
+done
+
+# Re-apply if anything (a Wi-Fi service restart) clears it; one cheap check a minute.
+while true; do
+    sleep 60
+    wifi_cn || cmd wifi force-country-code enabled CN >/dev/null 2>&1
+done &

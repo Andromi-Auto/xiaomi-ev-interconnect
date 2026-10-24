@@ -1,6 +1,6 @@
 {
-  "version": "v3",
-  "versionCode": 3,
-  "zipUrl": "https://github.com/Andromi-Auto/xiaomi-ev-interconnect/releases/download/v3/xiaomi-ev-interconnect-v3.zip",
+  "version": "v4",
+  "versionCode": 4,
+  "zipUrl": "https://github.com/Andromi-Auto/xiaomi-ev-interconnect/releases/download/v4/xiaomi-ev-interconnect-v4.zip",
   "changelog": "https://raw.githubusercontent.com/Andromi-Auto/xiaomi-ev-interconnect/main/CHANGELOG.md"
 }
