@@ -1,0 +1,51 @@
+name: Release module
+
+# Builds the module zip and publishes a release for the version in module.prop, once per version.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ID=$(sed -n 's/^id=//p' module.prop)
+          VERSION=$(sed -n 's/^version=//p' module.prop)
+          CODE=$(sed -n 's/^versionCode=//p' module.prop)
+
+          # update.json is what KernelSU/Magisk read to offer the update, so it must match.
+          python3 - "$VERSION" "$CODE" "$ID" <<'PY'
+          import json, sys
+          version, code, mod_id = sys.argv[1], int(sys.argv[2]), sys.argv[3]
+          u = json.load(open("update.json"))
+          assert u["version"] == version, f"update.json version {u['version']} != module.prop {version}"
+          assert u["versionCode"] == code, f"update.json versionCode {u['versionCode']} != module.prop {code}"
+          assert u["zipUrl"].endswith(f"/{version}/{mod_id}-{version}.zip"), "update.json zipUrl does not match"
+          PY
+
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "Release $VERSION already exists; bump version in module.prop to publish a new one."
+            exit 0
+          fi
+
+          ZIP="$ID-$VERSION.zip"
+          # Only the files a module consists of; the scripts that exist are picked up by name.
+          SCRIPTS=$(ls post-fs-data.sh service.sh customize.sh uninstall.sh 2>/dev/null || true)
+          zip -r -9 "$ZIP" module.prop $SCRIPTS META-INF system
+          unzip -l "$ZIP"
+
+          # The release notes are this version's section of CHANGELOG.md.
+          awk -v v="## $VERSION" '$0==v{on=1;next} /^## /{on=0} on' CHANGELOG.md > notes.md
+
+          gh release create "$VERSION" "$ZIP" --target "$GITHUB_SHA" \
+            --title "$(sed -n 's/^name=//p' module.prop) $VERSION" --notes-file notes.md --latest

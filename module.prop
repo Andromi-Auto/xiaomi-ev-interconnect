@@ -1,0 +1,7 @@
+id=xiaomi-ev-interconnect
+name=Xiaomi EV Interconnect
+version=v3
+versionCode=3
+author=Pagnchanak
+description=Adds Xiaomi EV Interconnectivity (car connection service) to HyperOS Global and EEA ROMs. Sets the phone's region to CN.
+updateJson=https://raw.githubusercontent.com/Andromi-Auto/xiaomi-ev-interconnect/main/update.json

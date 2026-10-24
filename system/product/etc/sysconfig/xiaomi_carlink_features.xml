@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <!-- Exempt MIS from background execution limitations -->
+    <allow-in-power-save package="com.xiaomi.mis" />
+    <allow-in-data-usage-save package="com.xiaomi.mis" />
+    
+    <feature name="com.xiaomi.carlink" />
+    <feature name="com.xiaomi.mis" />
+</config>

@@ -1,0 +1,5 @@
+# Scripts run on Android: keep Unix line endings whatever the editor
+*.sh text eol=lf
+*.prop text eol=lf
+META-INF/** text eol=lf
+*.apk binary
