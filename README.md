@@ -7,13 +7,20 @@ Part of the [Andromi Auto](https://andromi-auto.github.io) project, but it works
 ## Requirements
 
 - A Xiaomi phone on **HyperOS** with a Global or EEA ROM
-- **Unlocked bootloader** and **KernelSU** (Magisk also works)
+- **Unlocked bootloader** and **KernelSU** or **KernelSU Next** (Magisk also works)
+- A **metamodule** installed first: KernelSU only adds a module's apps and files to the system
+  through one. We recommend [NoMount](https://github.com/maxsteeel/nomount/releases/latest).
+  Without it the module installs but its apps never appear.
+
+Tested on a Xiaomi 17 Pro Max, HyperOS EU (EEA) ROM, KernelSU Next with NoMount.
 
 ## Install
 
-1. Download **`xiaomi-ev-interconnect-<version>.zip`** from the [latest release](https://github.com/Andromi-Auto/xiaomi-ev-interconnect/releases/latest).
-2. Open **KernelSU** → **Module** → **Install**, and choose the zip.
-3. **Reboot** the phone.
+1. Install the [NoMount](https://github.com/maxsteeel/nomount/releases/latest) metamodule in
+   KernelSU and reboot, if you have not yet.
+2. Download **`xiaomi-ev-interconnect-<version>.zip`** from the [latest release](https://github.com/Andromi-Auto/xiaomi-ev-interconnect/releases/latest).
+3. Open **KernelSU** → **Module** → **Install**, and choose the zip.
+4. **Reboot** the phone.
 
 Later versions show up as an update in KernelSU's module list.
 
